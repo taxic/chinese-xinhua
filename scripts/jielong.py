@@ -7,7 +7,11 @@ with open('../data/idiom-graph.json') as gf:
 
 n = len(graph_data)
 
-def find_from_start_with(si, start_str):
+hard = dict()
+def give_hints(start_str):
+    if start_str not in hard.keys():
+        hard[start_str] = 0
+    si = hard[start_str]
     for i in range(si, n):
         split_str = graph_data[i]["english"].split()
         if(start_str == split_str[0]):
@@ -15,11 +19,9 @@ def find_from_start_with(si, start_str):
             print(data[data_no], int(graph_data[i]["next_num"]))
             for k in range(min(int(graph_data[i]["next_num"]), 5)):
                 print("can be followed by:", data[int(graph_data[i]["next"][k])])
-            return i + 1
+            hard[start_str] = i + 1
+            break
 
-remember = dict()
 while(1):
     start_chars = input("start chars:\n")
-    if start_chars not in remember.keys():
-        remember[start_chars] = 0
-    remember[start_chars] = find_from_start_with(remember[start_chars], start_chars)
+    give_hints(start_chars)
